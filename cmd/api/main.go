@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -19,7 +18,6 @@ type Config struct {
 func handleNewsLetter(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
-
 func main() {
 
 	configPath := flag.String("config", "", "Path to config file")
@@ -37,7 +35,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Ошибка подключения к БД %v", err)
 	}
-	fmt.Printf(db.Name())
 
 	http.HandleFunc("/newsletter", handleNewsLetter)
 	log.Fatal(http.ListenAndServe(":8080", nil))
