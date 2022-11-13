@@ -33,7 +33,7 @@ func main() {
 		log.Fatalf("Ошибка декодирования файла конфигов %v", err)
 	}
 
-	if cfg.DbAddress == "" || cfg.DbName == "" || cfg.DbPassword == "" || cfg.DbUsername == "" || cfg.BotToken == "" {
+	if cfg.DbAddress == "" || cfg.DbName == "" || cfg.DbPassword == "" || cfg.DbUsername == "" {
 		log.Fatalf("Отсутсвуют необходимые для работы строки конфига")
 	}
 
