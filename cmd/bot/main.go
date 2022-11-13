@@ -16,12 +16,12 @@ func main() {
 	if database.Connection.Error != nil {
 		log.Fatal("Error connecting to database:", database.Connection.Error)
 	}
+
 	tgBot := Bot.Bot{
 		Bot:      Bot.InitBot(cfg.BotToken),
 		Database: database,
 	}
-	tgBot.Bot.Handle("/start", tgBot.StartHandler)
 
-	log.Println("Bot service started.")
+	tgBot.Bot.Handle("/start", tgBot.StartHandler)
 	tgBot.Bot.Start()
 }
