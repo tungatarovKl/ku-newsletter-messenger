@@ -1,0 +1,14 @@
+services:
+    db:
+        container_name: db
+        image: mysql
+        volumes:
+            - ../database/data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+            MYSQL_DATABASE: LaravelTest
+            MYSQL_USER: MYSQL_USER
+            MYSQL_PASSWORD: MYSQL_PASSWORD
+        ports:
+            - 3306:3306
