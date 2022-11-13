@@ -1,3 +1,4 @@
+// File for config reading
 package config
 
 import (

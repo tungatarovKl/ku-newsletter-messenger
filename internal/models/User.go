@@ -1,4 +1,4 @@
-package Repository
+package models
 
 import (
 	"gorm.io/gorm"
@@ -19,7 +19,6 @@ func (database *Database) NewUser(telegramId int64, firstName, lastName string, 
 	if dbFind.Error != nil {
 		return dbFind.Error
 	}
-	println(dbFind.RowsAffected)
 	if dbFind.RowsAffected > 0 {
 		return nil
 	}

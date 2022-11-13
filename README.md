@@ -1,29 +1,14 @@
 # Steps 
 
-## Создать систему папок
-Для начала написания кода нужна система папок, внутри который мы будем хранить будущий проект
-
-```
-├───cmd
-│       ├───api
-│       │       └───main.go
-│       │               
-│       │               
-│       └───bot
-│               └───main.go            
-├───config
-│       
-└───internal
-        └───models
-```
-
-**Цели каждой папки**:
+## Файловая структура:
+- build = директория для запуска проекта
 - cmd = хранит пакеты, которые доступны извне
-- config = программа хранит внутри данной папки основную информацию о DSN баз данных, BotToken телеграмм-бота и т.д.
+- config = хранит конфиги и функция чтения конфигов
 - internal = хранит пакеты , которые доступны только внутри программы, недоступные извне
 - cmd/api = хранит наш каркас Api, благодаря работает наш веб-сервис
 - cmd/bot = хранит наш каркас Бота
 - internal/models = хранит структуры объектов (entities) и подключения нашей базы данных к самому проекту.
+- internal/models/migrations = хранит миграции
 
 >В проекте 2 main файла в 2 директориях. Делается это для того, чтобы запустить 2 сервера в рамках 1 проекта
 
@@ -31,17 +16,13 @@
 ```shell
 go mod vendor
 ```
-## Указать пароль в docker-compose.yml и config/local.toml
-## Создать базу данных MySQL из коренной папки (Docker), запустив ее 
+## Указать телеграм-токен и пароль от БД в ./build/docker-compose.yml и config/local.toml
+## Поднять сервис и БД в докере
 ```shell
+cd ./build
 docker-compose up
 ```
-## При необходимости создать базу данных
+## При необходимости создать таблицу в базе данных
 ```
-go run Model/Migrations/CreateUsersTable.go -config=config/local.toml
-```
-## Запустить проект
-```shell
- go run cmd/api/main.go -config=config/local.toml
- go run cmd/bot/main.go -config=config/local.toml
+docker exec -it go-messenger-bot go run Model/Migrations/CreateUsersTable.go -config=config/local.toml
 ```

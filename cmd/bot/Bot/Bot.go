@@ -4,11 +4,11 @@ import (
 	"gopkg.in/telebot.v3"
 	"log"
 	"time"
-	"upgrade/Model/Repository"
+	"upgrade/internal/models"
 )
 
 type Bot struct {
-	Database *Repository.Database
+	Database *models.Database
 	Bot      *telebot.Bot
 }
 
