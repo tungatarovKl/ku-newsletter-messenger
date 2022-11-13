@@ -36,7 +36,12 @@ go mod vendor
 ```shell
 docker-compose up
 ```
+## При необходимости создать базу данных
+```
+go run Model/Migrations/CreateUsersTable.go -config=config/local.toml
+```
 ## Запустить проект
 ```shell
  go run cmd/api/main.go -config=config/local.toml
+ go run cmd/bot/main.go -config=config/local.toml
 ```

@@ -1,3 +1,4 @@
+botToken = ""
 dbAddress = "localhost:3306"
 dbName = "ku1_newsletter"
 dbUsername = "ku1-newsletter-user"
