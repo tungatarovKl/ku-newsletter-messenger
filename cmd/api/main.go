@@ -38,7 +38,7 @@ func main() {
 	}
 
 	dsn := cfg.DbUsername + ":" + cfg.DbPassword + "@tcp(" + cfg.DbAddress + ")/" + cfg.DbName + "?charset=utf8mb4&parseTime=True&loc=Local"
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	_, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		log.Fatalf("Ошибка подключения к БД %v", err)

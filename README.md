@@ -31,11 +31,12 @@
 ```shell
 go mod vendor
 ```
+## Указать пароль в docker-compose.yml и config/local.toml
 ## Создать базу данных MySQL из коренной папки (Docker), запустив ее 
 ```shell
 docker-compose up
 ```
 ## Запустить проект
 ```shell
- go run main.go -config=config/local.toml
+ go run cmd/api/main.go -config=config/local.toml
 ```
