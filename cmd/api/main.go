@@ -23,7 +23,6 @@ func handleNewsLetter(rw http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-
 	configPath := flag.String("config", "", "Path to config file")
 	flag.Parse()
 
@@ -32,6 +31,10 @@ func main() {
 
 	if err != nil {
 		log.Fatalf("Ошибка декодирования файла конфигов %v", err)
+	}
+
+	if cfg.DbAddress == "" || cfg.DbName == "" || cfg.DbPassword == "" || cfg.DbUsername == "" || cfg.BotToken == "" {
+		log.Fatalf("Отсутсвуют необходимые для работы строки конфига")
 	}
 
 	dsn := cfg.DbUsername + ":" + cfg.DbPassword + "@tcp(" + cfg.DbAddress + ")/" + cfg.DbName + "?charset=utf8mb4&parseTime=True&loc=Local"
