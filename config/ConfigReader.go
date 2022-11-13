@@ -19,5 +19,12 @@ func ReadConfig(configPath string) *Config {
 	if _, err := toml.DecodeFile(configPath, &cfg); err != nil {
 		log.Fatal("Error decoding config: ", configPath, err.Error())
 	}
+	if cfg.DbAddress == "" ||
+		cfg.DbName == "" ||
+		cfg.DbPassword == "" ||
+		cfg.DbUsername == "" ||
+		cfg.BotToken == "" {
+		log.Fatalf("Отсутсвуют необходимые для работы строки конфига")
+	}
 	return &cfg
 }

@@ -9,7 +9,6 @@ import (
 )
 
 func main() {
-	println("BOT")
 	configPath := flag.String("config", "", "Path to config file")
 	flag.Parse()
 	cfg := config.ReadConfig(*configPath)
@@ -22,5 +21,7 @@ func main() {
 		Database: database,
 	}
 	tgBot.Bot.Handle("/start", tgBot.StartHandler)
+
+	log.Println("Bot service started.")
 	tgBot.Bot.Start()
 }

@@ -23,6 +23,4 @@ cd ./build
 docker-compose up
 ```
 ## При необходимости создать таблицу в базе данных
-```
-docker exec -it go-messenger-bot go run Model/Migrations/CreateUsersTable.go -config=config/local.toml
-```
+Миграция: ./build/DatabaseCreation.sql
