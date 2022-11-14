@@ -11,10 +11,13 @@ import (
 func main() {
 	configPath := flag.String("config", "", "Path to config file")
 	flag.Parse()
-	cfg := config.ReadConfig(*configPath)
-	database := models.NewDatabase(cfg.DbAddress, cfg.DbName, cfg.DbUsername, cfg.DbPassword)
-	if database.Connection.Error != nil {
-		log.Fatal("Error connecting to database:", database.Connection.Error)
+	cfg, cfgErr := config.ReadConfig(*configPath)
+	if cfgErr != nil {
+		log.Fatal(cfgErr.Error())
+	}
+	database, dbErr := models.NewDatabase(cfg.DbAddress, cfg.DbName, cfg.DbUsername, cfg.DbPassword)
+	if dbErr != nil {
+		log.Fatal("Error connecting to database: ", dbErr)
 	}
 
 	tgBot := Bot.Bot{

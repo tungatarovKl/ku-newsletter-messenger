@@ -1,3 +1,4 @@
+#Telegram bot token
 botToken = ""
 #Mysql container name and port
 dbAddress = "mysql-go:3306"

@@ -2,6 +2,7 @@
 package config
 
 import (
+	"errors"
 	"github.com/BurntSushi/toml"
 	"log"
 )
@@ -14,8 +15,9 @@ type Config struct {
 	DbPassword string `toml:"dbPassword"`
 }
 
-func ReadConfig(configPath string) *Config {
+func ReadConfig(configPath string) (*Config, error) {
 	var cfg Config
+	var emptyFields error = nil
 	if _, err := toml.DecodeFile(configPath, &cfg); err != nil {
 		log.Fatal("Error decoding config: ", configPath, err.Error())
 	}
@@ -24,7 +26,7 @@ func ReadConfig(configPath string) *Config {
 		cfg.DbPassword == "" ||
 		cfg.DbUsername == "" ||
 		cfg.BotToken == "" {
-		log.Fatalf("Отсутсвуют необходимые для работы строки конфига")
+		emptyFields = errors.New("Needed config strings are absent")
 	}
-	return &cfg
+	return &cfg, emptyFields
 }
