@@ -32,3 +32,9 @@ func (database *Database) NewUser(telegramId int64, firstName, lastName string, 
 	})
 	return dbCreate.Error
 }
+
+func (database *Database) GetAllUsers() ([]User, error) {
+	var users []User
+	dbFind := database.Connection.Find(&users)
+	return users, dbFind.Error
+}

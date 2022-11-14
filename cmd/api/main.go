@@ -4,10 +4,10 @@ import (
 	"flag"
 	"log"
 	"net/http"
-
-	"github.com/BurntSushi/toml"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
+	"upgrade/config"
+	"upgrade/internal/bot"
+	"upgrade/internal/controllers"
+	"upgrade/internal/models"
 )
 
 type Config struct {
@@ -18,32 +18,25 @@ type Config struct {
 	DbPassword string `toml:"dbPassword"`
 }
 
-func handleNewsLetter(rw http.ResponseWriter, r *http.Request) {
-	rw.WriteHeader(http.StatusOK)
-}
-
 func main() {
 	configPath := flag.String("config", "", "Path to config file")
 	flag.Parse()
 
-	cfg := &Config{}
-	_, err := toml.DecodeFile(*configPath, cfg)
-
-	if err != nil {
-		log.Fatalf("Ошибка декодирования файла конфигов %v", err)
+	cfg, cfgErr := config.ReadConfig(*configPath)
+	if cfgErr != nil {
+		log.Fatal(cfgErr.Error())
 	}
 
-	if cfg.DbAddress == "" || cfg.DbName == "" || cfg.DbPassword == "" || cfg.DbUsername == "" {
-		log.Fatalf("Отсутсвуют необходимые для работы строки конфига")
+	database, dbErr := models.NewDatabase(cfg.DbAddress, cfg.DbName, cfg.DbUsername, cfg.DbPassword)
+	if dbErr != nil {
+		log.Fatal("Error connecting to database: ", dbErr)
 	}
 
-	dsn := cfg.DbUsername + ":" + cfg.DbPassword + "@tcp(" + cfg.DbAddress + ")/" + cfg.DbName + "?charset=utf8mb4&parseTime=True&loc=Local"
-	_, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
-
-	if err != nil {
-		log.Fatalf("Ошибка подключения к БД %v", err)
+	tgBot := bot.Bot{
+		Bot:      bot.InitBot(cfg.BotToken),
+		Database: database,
 	}
 
-	http.HandleFunc("/newsletter", handleNewsLetter)
+	http.HandleFunc("/newsletter", controllers.NewsLetterPost(tgBot))
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

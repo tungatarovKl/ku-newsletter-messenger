@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"log"
-	"upgrade/cmd/bot/Bot"
 	"upgrade/config"
+	"upgrade/internal/bot"
 	"upgrade/internal/models"
 )
 
@@ -20,8 +20,8 @@ func main() {
 		log.Fatal("Error connecting to database: ", dbErr)
 	}
 
-	tgBot := Bot.Bot{
-		Bot:      Bot.InitBot(cfg.BotToken),
+	tgBot := bot.Bot{
+		Bot:      bot.InitBot(cfg.BotToken),
 		Database: database,
 	}
 
