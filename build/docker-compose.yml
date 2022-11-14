@@ -1,0 +1,37 @@
+services:
+    #Message sender
+    api:
+        container_name: go-messenger-api
+        image: golang
+        restart: always
+        depends_on:
+            - db
+        volumes:
+            - ../:/usr/src/ku1-newsletter-messenger
+        working_dir: /usr/src/ku1-newsletter-messenger
+        ports:
+            - 8080:8080
+        entrypoint: go run cmd/api/main.go -config=config/local.toml
+    #Users registrator
+    bot:
+        container_name: go-messenger-bot
+        image: golang
+        restart: always
+        depends_on:
+            -   db
+        volumes:
+            - ../:/usr/src/ku1-newsletter-messenger
+        working_dir: /usr/src/ku1-newsletter-messenger
+        entrypoint: go run cmd/bot/main.go -config=config/local.toml
+    #Database
+    db:
+        container_name: mysql-go
+        image: mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+            MYSQL_DATABASE: ku1_newsletter
+            MYSQL_USER: ku1-newsletter-user
+            MYSQL_PASSWORD:
+        ports:
+            - 3306:3306

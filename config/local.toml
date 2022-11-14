@@ -1,4 +1,7 @@
-dbAddress = "localhost:3306"
-dbName = "Task_Manager"
-dbUsername = "root"
+#Telegram bot token
+botToken = ""
+#Mysql container name and port
+dbAddress = "mysql-go:3306"
+dbName = "ku1_newsletter"
+dbUsername = "ku1-newsletter-user"
 dbPassword = ""
