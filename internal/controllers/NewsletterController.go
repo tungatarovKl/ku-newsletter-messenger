@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"sync"
 	"upgrade/internal/bot"
 )
 
@@ -43,9 +44,17 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 		}
 
 		//Send message for all registered users
+		var sendWG sync.WaitGroup
+		sendWG.Add(len(users))
 		for _, user := range users {
-			bot.SendMessage(user.TelegramId, apiRequest.Message)
+			//New routine
+			go func() {
+				bot.SendMessage(user.TelegramId, apiRequest.Message)
+				sendWG.Done()
+			}()
 		}
+		//Waiting for all routines to complete
+		sendWG.Wait()
 
 		rw.WriteHeader(http.StatusOK)
 		rw.Write([]byte("OK"))
