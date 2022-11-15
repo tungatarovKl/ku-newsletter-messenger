@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"sync"
 	"upgrade/internal/bot"
+	"upgrade/internal/models"
 )
 
 type ApiRequest struct {
@@ -48,10 +49,10 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 		sendWG.Add(len(users))
 		for _, user := range users {
 			//New routine
-			go func() {
-				bot.SendMessage(user.TelegramId, apiRequest.Message)
+			go func(u models.User) {
+				bot.SendMessage(u.TelegramId, apiRequest.Message)
 				sendWG.Done()
-			}()
+			}(user)
 		}
 		//Waiting for all routines to complete
 		sendWG.Wait()
