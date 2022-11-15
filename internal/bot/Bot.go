@@ -3,6 +3,7 @@ package bot
 import (
 	"gopkg.in/telebot.v3"
 	"log"
+	"net/http"
 	"time"
 	"upgrade/internal/models"
 )
@@ -16,6 +17,8 @@ func InitBot(token string) *telebot.Bot {
 	pref := telebot.Settings{
 		Token:  token,
 		Poller: &telebot.LongPoller{Timeout: 10 * time.Second},
+		//Timeout to send message
+		Client: &http.Client{Timeout: 2 * time.Second},
 	}
 
 	b, err := telebot.NewBot(pref)
