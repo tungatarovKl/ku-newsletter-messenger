@@ -1,7 +1,7 @@
 #Telegram bot token
-botToken = ""
+botToken = "5793483632:AAHcsmlLhCau1qpF4k4YJ2EP0CMahGqvOJc"
 #Mysql container name and port
 dbAddress = "ku1-newsletter-messenger-mysql:3306"
 dbName = "ku1_newsletter"
-dbUsername = "ku1-newsletter-user"
-dbPassword = ""
+dbUsername = "root"
+dbPassword = "MYSQL_ROOT_PASSWORD"

@@ -32,7 +32,12 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 			return
 		}
 
-		if apiRequest.Message == "" || apiRequest.Token == "" {
+		if bot.Database.CheckToken(apiRequest.Token) == nil {
+			http.Error(rw, "Invalid token entered", http.StatusBadRequest)
+			return
+		}
+
+		if apiRequest.Message == "" {
 			http.Error(rw, "Some required fields are absent", http.StatusBadRequest)
 			return
 		}

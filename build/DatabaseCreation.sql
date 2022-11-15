@@ -8,3 +8,9 @@ CREATE TABLE `users` (
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL
   );
+
+
+CREATE TABLE `tokens` (
+  `id` int unsigned primary key NOT NULL AUTO_INCREMENT,
+  `Token_String` varchar(150) UNIQUE NOT NULL
+  );
