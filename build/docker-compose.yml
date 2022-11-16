@@ -31,7 +31,7 @@ services:
             MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
             MYSQL_DATABASE: ku1_newsletter
             MYSQL_USER: ku1-newsletter-user
-            MYSQL_PASSWORD: 1234
+            MYSQL_PASSWORD: 
         ports:
             - 3316:3306
 

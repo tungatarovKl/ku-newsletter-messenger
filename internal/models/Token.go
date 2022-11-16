@@ -1,18 +1,35 @@
 package models
 
 import (
+	"errors"
+
 	"gorm.io/gorm"
 )
 
 type Token struct {
 	gorm.Model
 	id           int    `gorm:"primaryKey"`
-	Token_String string `gorm:"column:Token_String;not null;unique"`
+	Token_Key    string `gorm:"column:Token_Key;not null;unique"`
+	Service_Name string `gorm:"column:Service_Name;not null"`
 }
 
-func (database *Database) CheckToken(tokenStr string) error {
+func (database *Database) ValidateToken(tokenStr string) (bool, error) {
+	if tokenStr == "" {
+		return false, errors.New("The entered token string is empty")
+	}
 
-	var resultToken Token
-	currentToken := database.Connection.Model(Token{Token_String: tokenStr}).First(&resultToken)
-	return currentToken.Error
+	//Get the count of the matching tokens in the database
+	var result int64
+	err := database.Connection.Model(Token{Token_Key: tokenStr}).Count(&result).Error
+
+	//In case of an error of connecting to the database
+	if err != nil {
+		return false, err
+	}
+
+	//If the result is found
+	if result > 0 {
+		return true, nil
+	}
+	return false, nil
 }
