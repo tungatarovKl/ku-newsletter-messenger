@@ -76,8 +76,6 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 			}(user, sendErr)
 		}
 
-		//Waiting for all routines to complete and close channel
-
 		sendWG.Wait()
 		close(sendErr)
 
