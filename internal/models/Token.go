@@ -20,7 +20,7 @@ func (database *Database) ValidateToken(tokenStr string) (bool, error) {
 
 	//Get the count of the matching tokens in the database
 	var result int64
-	err := database.Connection.Model(Token{Token_Key: tokenStr}).Count(&result).Error
+	err := database.Connection.Model(&Token{}).Where("Token_Key = ?", tokenStr).Count(&result).Error
 
 	//In case of an error of connecting to the database
 	if err != nil {

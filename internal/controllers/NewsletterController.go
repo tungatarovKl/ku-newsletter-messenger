@@ -35,7 +35,7 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 		//Check whether the proper token was sent
 		if checked, err := bot.Database.ValidateToken(apiRequest.Token); checked == false {
 			if err != nil {
-				http.Error(rw, err.Error(), http.StatusBadRequest)
+				http.Error(rw, "Dependency error", http.StatusFailedDependency)
 				return
 			}
 			http.Error(rw, "Invalid token error, the entered token does not exist", http.StatusBadRequest)
@@ -56,7 +56,7 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 
 		//Send message for all registered users
 		var sendWG sync.WaitGroup
-
+		sendWG.Add(len(users))
 		for _, user := range users {
 			go func(u models.User) {
 				bot.SendMessage(u.TelegramId, apiRequest.Message)
