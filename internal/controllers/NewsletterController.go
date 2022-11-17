@@ -33,8 +33,19 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 			return
 		}
 
-		if apiRequest.Message == "" || apiRequest.Token == "" {
-			http.Error(rw, "Some required fields are absent", http.StatusBadRequest)
+		//Check whether the proper token was sent
+		if checked, err := bot.Database.ValidateToken(apiRequest.Token); checked == false {
+			if err != nil {
+				log.Println(err.Error())
+				http.Error(rw, "Dependency error", http.StatusFailedDependency)
+				return
+			}
+			http.Error(rw, "Access denied", http.StatusNetworkAuthenticationRequired)
+			return
+		}
+
+		if apiRequest.Message == "" {
+			http.Error(rw, "Message is empty", http.StatusBadRequest)
 			return
 		}
 
@@ -51,6 +62,7 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 		sendErr := make(chan error, len(users)) //Channel to store errors
 
 		for _, user := range users {
+
 			//New routine
 			go func(u models.User, errChan chan error) {
 
@@ -59,13 +71,11 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 				if sErr != nil {
 					errChan <- sErr //Send error to channel
 				}
-
 				sendWG.Done()
 
 			}(user, sendErr)
 		}
 
-		//Waiting for all routines to complete and close channel
 		sendWG.Wait()
 		close(sendErr)
 
