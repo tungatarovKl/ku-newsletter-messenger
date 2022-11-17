@@ -37,7 +37,7 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 		if checked, err := bot.Database.ValidateToken(apiRequest.Token); checked == false {
 			if err != nil {
 				log.Println(err.Error())
-				http.Error(rw, "Dependency error", http.StatusFailedDependency)
+				http.Error(rw, "Access denied", http.StatusNetworkAuthenticationRequired)
 				return
 			}
 			http.Error(rw, "Invalid token error, the entered token does not exist", http.StatusBadRequest)
