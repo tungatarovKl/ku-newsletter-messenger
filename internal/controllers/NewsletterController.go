@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 	"sync"
 	"upgrade/internal/bot"
 	"upgrade/internal/models"
@@ -48,26 +49,48 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 			return
 		}
 
-		users, err := bot.Database.GetAllUsers()
-		if err != nil {
-			log.Println(err.Error())
+		users, gauErr := bot.Database.GetAllUsers()
+		if gauErr != nil {
+			log.Println(gauErr.Error())
 			http.Error(rw, "Dependency error", http.StatusFailedDependency)
 			return
 		}
 
-		//Send message for all registered users
+		//Send message to all registered users
 		var sendWG sync.WaitGroup
 		sendWG.Add(len(users))
+		sendErr := make(chan error, len(users)) //Channel to store errors
+
 		for _, user := range users {
-			go func(u models.User) {
-				bot.SendMessage(u.TelegramId, apiRequest.Message)
+
+			//New routine
+			go func(u models.User, errChan chan error) {
+
+				_, sErr := bot.SendMessage(u.TelegramId, apiRequest.Message)
+
+				if sErr != nil {
+					errChan <- sErr //Send error to channel
+				}
 				sendWG.Done()
-			}(user)
+
+			}(user, sendErr)
 		}
 
+		//Waiting for all routines to complete and close channel
+
 		sendWG.Wait()
+		close(sendErr)
+
+		//Count percent of faults
+		sendErrPercent := len(sendErr) * 100 / len(users)
+
+		//Send error response if more than 50% of faults
+		if sendErrPercent > 50 {
+			http.Error(rw, "Sent to "+strconv.Itoa(100-sendErrPercent)+"% of users", http.StatusFailedDependency)
+			return
+		}
 
 		rw.WriteHeader(http.StatusOK)
-		rw.Write([]byte("OK"))
+		rw.Write([]byte("Sent to " + strconv.Itoa(100-sendErrPercent) + "% of users"))
 	}
 }
