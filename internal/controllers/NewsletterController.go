@@ -35,6 +35,7 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 		//Check whether the proper token was sent
 		if checked, err := bot.Database.ValidateToken(apiRequest.Token); checked == false {
 			if err != nil {
+				log.Println(err.Error())
 				http.Error(rw, "Dependency error", http.StatusFailedDependency)
 				return
 			}
