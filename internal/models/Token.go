@@ -1,8 +1,6 @@
 package models
 
 import (
-	"errors"
-
 	"gorm.io/gorm"
 )
 
@@ -15,7 +13,7 @@ type Token struct {
 
 func (database *Database) ValidateToken(tokenStr string) (bool, error) {
 	if tokenStr == "" {
-		return false, errors.New("The entered token string is empty")
+		return false, nil
 	}
 
 	//Get the count of the matching tokens in the database

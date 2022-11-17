@@ -45,7 +45,7 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 		}
 
 		if apiRequest.Message == "" {
-			http.Error(rw, "Some required fields are absent", http.StatusBadRequest)
+			http.Error(rw, "Message is empty", http.StatusBadRequest)
 			return
 		}
 
