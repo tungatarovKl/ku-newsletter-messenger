@@ -21,14 +21,14 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 
 		var apiRequest ApiRequest
 
-		requestBody, readErr := io.ReadAll(r.Body)
-		if readErr != nil {
+		requestBody, err := io.ReadAll(r.Body)
+		if err != nil {
 			http.Error(rw, "Request parsing error", http.StatusBadRequest)
 			return
 		}
 
-		parseErr := json.Unmarshal(requestBody, &apiRequest)
-		if parseErr != nil {
+		err = json.Unmarshal(requestBody, &apiRequest)
+		if err != nil {
 			http.Error(rw, "Request parsing error", http.StatusBadRequest)
 			return
 		}
@@ -49,10 +49,16 @@ func NewsLetterPost(bot bot.Bot) http.HandlerFunc {
 			return
 		}
 
-		users, gauErr := bot.Database.GetAllUsers()
-		if gauErr != nil {
-			log.Println(gauErr.Error())
+		users, err := bot.Database.GetAllUsers()
+		if err != nil {
+			log.Println(err.Error())
 			http.Error(rw, "Dependency error", http.StatusFailedDependency)
+			return
+		}
+
+		if len(users) == 0 {
+			log.Println("Users table is empty!")
+			http.Error(rw, "Recipient list is empty", http.StatusExpectationFailed)
 			return
 		}
 
