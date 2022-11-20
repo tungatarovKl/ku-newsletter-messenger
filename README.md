@@ -10,16 +10,18 @@
 - internal/models = хранит структуры объектов (entities) и подключения нашей базы данных к самому проекту.
 - internal/controllers = контроллеры для API
 - internal/bot = логика телеграм- бота
-
+- **Файлы базы данных (настройки и данные) пробрасываются в папку ../ku1-newsletter-messenger-database,
+т.е. создается директория на уровень выше директории проекта**
 ## Инициализировать библиотеки
 ```shell
 go mod vendor
 ```
-## Указать телеграм-токен и пароль от БД в ./build/docker-compose.yml и config/local.toml
+## Указать телеграм-токен config/local.toml
+## При необходимости изменить параметры базы данных в config/local.toml и build_messenger/database/Dockerfile
 ## Поднять сервис и БД в докере
 ```shell
 cd ./build
-docker-compose up
+docker-compose up -d
 ```
-## При необходимости создать таблицу в базе данных
+## При необходимости создать таблицы в базе данных
 Миграция: ./build/DatabaseCreation.sql
