@@ -19,7 +19,7 @@ go mod vendor
 ## Поднять сервис и БД в докере
 ```shell
 cd ./build
-docker-compose up
+docker-compose up -d
 ```
 ## При необходимости создать таблицу в базе данных
 Миграция: ./build/DatabaseCreation.sql
