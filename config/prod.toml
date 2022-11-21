@@ -1,0 +1,7 @@
+#Telegram bot token
+botToken = ""
+#Database configuration
+dbAddress = ""
+dbName = ""
+dbUsername = ""
+dbPassword = ""

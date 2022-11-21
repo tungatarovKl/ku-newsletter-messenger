@@ -1,4 +1,4 @@
-use ku1_newsletter_messenger;
+use messenger;
 CREATE TABLE `users` (
  `id` int unsigned primary key NOT NULL AUTO_INCREMENT,
   `Telegram_Id` bigint UNSIGNED NOT NULL,

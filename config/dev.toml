@@ -1,0 +1,7 @@
+#Telegram bot token
+botToken = ""
+#Database configuration
+dbAddress = "messenger-mysql:3306"
+dbName = "messenger"
+dbUsername = "messenger-user"
+dbPassword = "messenger-Pa5Sw0rD!"

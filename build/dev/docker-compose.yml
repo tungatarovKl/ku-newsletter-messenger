@@ -1,0 +1,40 @@
+version: '3'
+services:
+    # Message sender
+    ku1-newsletter-messenger-api:
+        container_name: messenger-api
+        image: golang
+        restart: always
+        depends_on:
+            - messenger-mysql
+        volumes:
+            - ../../:/usr/src/messenger
+        working_dir: /usr/src/messenger
+        entrypoint: go run cmd/api/main.go -config=config/dev.toml
+    # Users registrator
+    messenger-bot:
+        container_name: messenger-bot
+        image: golang
+        restart: always
+        depends_on:
+            - messenger-mysql
+        volumes:
+            - ../../:/usr/src/messenger
+        working_dir: /usr/src/messenger
+        entrypoint: go run cmd/bot/main.go -config=config/dev.toml
+    # Database
+    messenger-mysql:
+        container_name: messenger-mysql
+        build:
+            context: database
+            dockerfile: Dockerfile
+        restart: always
+        volumes:
+            - ../../../messenger-database:/var/lib/mysql
+        ports:
+            - 3316:3306
+
+# Network to communicate with newsletter-admin
+networks:
+    bridge:
+        external: true
