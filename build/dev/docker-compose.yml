@@ -30,7 +30,7 @@ services:
             dockerfile: Dockerfile
         restart: always
         volumes:
-            - ../../../messenger-database:/var/lib/mysql
+            - messenger-mysql-data:/var/lib/mysql
         ports:
             - 3316:3306
 
@@ -38,3 +38,6 @@ services:
 networks:
     bridge:
         external: true
+
+volumes:
+    messenger-mysql-data: {}
