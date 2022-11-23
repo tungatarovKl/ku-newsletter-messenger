@@ -1,0 +1,25 @@
+version: '3'
+services:
+    # Message sender
+    messenger-api:
+        container_name: messenger-api
+        image: golang
+        restart: always
+        volumes:
+            - ../../:/usr/src/messenger
+        working_dir: /usr/src/messenger
+        entrypoint: go run cmd/api/main.go -config=config/prod.toml
+    # Users registrator
+    messenger-bot:
+        container_name: messenger-bot
+        image: golang
+        restart: always
+        volumes:
+            - ../../:/usr/src/messenger
+        working_dir: /usr/src/messenger
+        entrypoint: go run cmd/bot/main.go -config=config/prod.toml
+
+# Network to communicate with newsletter-admin
+networks:
+    bridge:
+        external: true
